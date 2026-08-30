@@ -1,0 +1,19 @@
+<!DOCTYPE html> 
+
+<html>
+    <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>CyberGaurd</title>
+       <link rel="stylesheet" href="{{url_for('static', filename='style.css') }}">
+
+    </head>
+    <body>
+        <h1>CyberGaurd</h1>
+        <p>Assess your cybersecurity habits and improve your online safety.</p>
+        <a href="{{ url_for('login') }}">Login</a>
+        <br><br>
+        <a href="{{ url_for('sign_up') }}">Sing Up</a>
+        <script src="{{url_for('static', filename='main.js')}}"></script>
+    </body>
+</html>
