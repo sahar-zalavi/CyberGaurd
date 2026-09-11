@@ -2,12 +2,132 @@
     <head>
        <meta charset="UTF-8">
        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <title>CyberGaurd</title>
+       <title>Security Assessment</title>
        <link rel="stylesheet" href="{{url_for('static', filename='style.css') }}">
 
     </head>
-    <body>
-    <a href="{{url_for ('login')}}">Login</a>
+<body class="bg-light">
+
+<a href="{{url_for ('index')}}">Home</a>
+
+<div class="container py-5">
+
+    <h1 class="mb-4">Security Assessment</h1>
+
+    <!-- Password Analysis -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Password Strength Analysis
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                <input type="hidden"
+                       name="type"
+                       value="password">
+
+                <input class="form-control mb-3"
+                       type="password"
+                       name="password"
+                       placeholder="Enter password">
+
+                <button class="btn btn-primary">
+                    Analyze Password
+                </button>
+
+            </form>
+
+            {% if password_result %}
+            <div class="alert alert-info mt-3">
+                Score: {{ password_result.score }}/4
+                <br>
+                Strength: {{ password_result.strength }}
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- Email Analysis -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            Email Phishing Detection
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                <input type="hidden"
+                       name="type"
+                       value="email">
+
+                <textarea class="form-control mb-3"
+                          name="email_text"
+                          rows="5"
+                          placeholder="Paste email content here"></textarea>
+
+                <button class="btn btn-warning">
+                    Analyze Email
+                </button>
+
+            </form>
+
+            {% if email_result %}
+            <div class="alert alert-warning mt-3">
+                {{ email_result }}
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- URL Analysis -->
+
+    <div class="card">
+
+        <div class="card-header">
+            URL Safety Check
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                <input type="hidden"
+                       name="type"
+                       value="url">
+
+                <input class="form-control mb-3"
+                       type="text"
+                       name="url"
+                       placeholder="Enter URL">
+
+                <button class="btn btn-success">
+                    Check URL
+                </button>
+
+            </form>
+
+            {% if url_result %}
+            <div class="alert alert-success mt-3">
+                URL Status: {{ url_result }}
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
     <script src="{{url_for('static', filename='main.js')}}"></script>
     </body>
 </html>

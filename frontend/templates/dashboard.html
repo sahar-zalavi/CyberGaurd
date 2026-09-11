@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
        <meta charset="UTF-8">
@@ -6,10 +7,74 @@
        <link rel="stylesheet" href="{{url_for('static', filename='style.css') }}">
 
     </head>
+
     <body>
     <a href="{{url_for ('index')}}">Home</a>
-    <h1>CyberGaurd Dashboard</h1>
-    <a href="{{url_for('assessment')}}"><button>Start Security Assessment</button></a>
+
+   
+
+        <nav>
+         <div class="container py-4">
+
+    <h1 class="fw-bold mb-3">CyberGuard Dashboard</h1>
+
+    <div class="alert alert-primary">
+        Welcome back, <strong>{{ full_name }}</strong>!
+    </div>
+
+   </div>
+     
+    <div class="container">
+        <section class= "security-score">
+            <h2>🛡️ Security Score</h2>
+            <div class="score" id="security-score">85/100</div>
+            <p>Current Status: Secure</p>
+        </section>
+
+        <section class="dashboard-grid">
+
+            <div class="card">
+                <h3>🔑 Password Analysis</h3>
+                <p id="password-result">
+                    No assessment completed yet.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>📧 Email Security</h3>
+                <p id="email-result">
+                    No assessment completed yet.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>🌐 URL Safety Check</h3>
+                <p id="url-result">
+                    No assessment completed yet.
+                </p>
+            </div>
+
+        </section>
+
+        <section class="stats">
+            <div class="card">
+                <h3>📊 Assessment Statistics</h3>
+                <p>Total Scans: <span id="total-scans">0</span></p>
+                <p>Threats Detected: <span id="threats-found">0</span></p>
+                <p>Last Scan: <span id="last-scan">Never</span></p>
+            </div>
+        </section>
+
+        <section class="actions">
+           
+               
+            </a>
+        </section>
+      
+    </div>
+ <a href="{{url_for('assessment')}}"><button>Start Security Assessment</button></a>
+    
+    
     <script src="{{url_for('static', filename='main.js')}}"></script>
     </body>
 </html>

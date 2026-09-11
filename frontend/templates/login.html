@@ -9,6 +9,7 @@
     <body>
         <h1>CyberGaurd</h1>
         <h2>Login</h2>
+        
         <form method="post">
             <label>Email</label>
             <br>
@@ -21,7 +22,7 @@
             <button type="submit">Login</button>
 
         </form>
-        <br>
+    <div id="error-message">{{ error or "" }}</div>
    <a href="{{ url_for('index') }}">Home</a>
    <br><br>
    <a href="{{url_for('sign_up')}}">Register an account</a>
