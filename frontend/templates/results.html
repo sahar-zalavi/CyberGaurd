@@ -1,0 +1,22 @@
+<html>
+    <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Result Assessment</title>
+       <link rel="stylesheet" href="{{url_for('static', filename='style.css') }}">
+
+    </head>
+<body class="bg-light">
+
+<a href="{{url_for ('index')}}">Home</a>
+
+<div class="container py-5">
+
+<h3>Password Findings</h3>
+<ul id="passwordIssues"></ul>
+
+<h3>Email Findings</h3>
+<ul id="emailIssues"></ul>
+
+<h3>URL Findings</h3>
+<ul id="urlIssues"></ul>

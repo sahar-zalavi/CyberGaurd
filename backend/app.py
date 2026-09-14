@@ -86,55 +86,219 @@ def sign_up():
     return render_template("sign_up.html")
 
 
+#password route
 
-# password analysis
-def check_password(password):
-    score = 0
-    if len(password) >= 8:
-        score += 1
-    if any(c.isupper() for c in password):
-        score += 1
-    if any(c.islower() for c in password):
-        score += 1
-    if any(c.isdigit() for c in password):
-        score += 1
-   
-    if score <=2 :
-        strength = "Weak"
-    if score == 3:
-        strength = "Medium"
-    else:
-        strength = "strong"
+@app.route("/analyze-password", methods=["POST"])
+def analyze_password_route():
 
-    return score, strength
+    data = request.get_json()
 
-# Email analysis
-def check_email(email_text):
-    suspicious_words = [
-        "urgent",
-        "click here",
-        "verify account",
-        "winner",
-        "free money",
+    password = data.get("password")
+
+    result = analyze_password(password)
+
+    return jsonify(result)
+
+# password analyzer
+
+import re
+
+def analyze_password(password):
+
+    score = 100
+    issues = []
+
+    # Length
+    if len(password) < 12:
+        score -= 20
+        issues.append("Password should be at least 12 characters.")
+
+    if len(password) < 16:
+        score -= 10
+        issues.append("Consider using 16+ characters for stronger security.")
+
+    # Uppercase
+    if not re.search(r"[A-Z]", password):
+        score -= 15
+        issues.append("Missing uppercase letters.")
+
+    # Lowercase
+    if not re.search(r"[a-z]", password):
+        score -= 15
+        issues.append("Missing lowercase letters.")
+
+    # Numbers
+    if not re.search(r"\d", password):
+        score -= 15
+        issues.append("Missing numbers.")
+
+    # Special characters
+    if not re.search(r"[!@#$%^&*()_+\-=\[\]{};':\"\\|,.<>/?]", password):
+        score -= 15
+        issues.append("Missing special characters.")
+
+    # Common passwords
+    common_passwords = [
+        "password",
+        "password123",
+        "123456",
+        "qwerty",
+        "admin",
+        "welcome",
+        "letmein"
     ]
-    score = 0
 
-    for word in suspicious_words:
-        if word.lower() in email_text.lower():
-            score += 1
-    return score
+    if password.lower() in common_passwords:
+        score -= 50
+        issues.append("Password is commonly used and easily guessed.")
+
+    # Repeated characters
+    if re.search(r"(.)\1\1", password):
+        score -= 15
+        issues.append("Contains repeated characters.")
+
+    # Sequential patterns
+    sequential = [
+        "1234",
+        "abcd",
+        "qwer",
+        "password"
+    ]
+
+    for patt in sequential:
+        if patt in password.lower():
+            score -= 15
+            issues.append(f"Contains predictable sequence: {patt}")
+
+    # Clamp score
+    score = max(0, min(score, 100))
+
+    # Security level
+    if score >= 85:
+        level = "Very Strong"
+    elif score >= 70:
+        level = "Strong"
+    elif score >= 50:
+        level = "Moderate"
+    elif score >= 30:
+        level = "Weak"
+    else:
+        level = "Very Weak"
+
+    return {
+        "score": score,
+        "level": level,
+        "issues": issues
+    }
 
 
-# URL safety check
-def check_url(url):
+#URL route
+
+@app.route("/analyze-url", methods=["POST"])
+def analyze_url_route():
+
+    data = request.get_json()
+
+    url = data.get("url")
+
+    result = analyze_url(url)
+
+    return jsonify(result)
+
+# URL Analyzer
+
+def analyze_url(url):
+
+    score = 100
+    issues = []
 
     if not url.startswith("https://"):
-        return "Suspicious"
+        score -= 20
+        issues.append(
+            "Website is not using HTTPS"
+        )
 
     if "@" in url:
-        return "Suspicious"
+        score -= 20
+        issues.append(
+            "Contains '@' symbol"
+        )
 
-    return "Safe"
+    if len(url) > 75:
+        score -= 10
+        issues.append(
+            "Unusually long URL"
+        )
+
+    score = max(0, score)
+
+    return {
+        "score": score,
+        "issues": issues
+    }
+
+
+#Email Route
+
+@app.route("/analyze-email", methods=["POST"])
+def analyze_email_route():
+
+    data = request.get_json()
+
+    email = data.get("email")
+
+    result = analyze_email(email)
+
+    return jsonify(result)
+
+#Email Analyzer
+
+def analyze_email(email):
+
+    score = 100
+    issues = []
+
+    urgency_words = [
+        "urgent",
+        "immediately",
+        "act now",
+        "limited time"
+    ]
+
+    for word in urgency_words:
+        if word in email.lower():
+            score -= 10
+            issues.append(
+                f'Urgency language detected: "{word}"'
+            )
+
+    credential_words = [
+        "verify account",
+        "confirm account",
+        "reset password",
+        "login now",
+        "update payment"
+    ]
+
+    for word in credential_words:
+        if word in email.lower():
+            score -= 15
+            issues.append(
+                f'Credential request detected: "{word}"'
+            )
+
+    if "http://" in email:
+        score -= 15
+        issues.append(
+            "Contains insecure HTTP link"
+        )
+
+    score = max(0, score)
+
+    return {
+        "score": score,
+        "issues": issues
+    }
 
 @app.route("/assessment", methods=["GET", "POST"])
 def assessment():
@@ -151,18 +315,16 @@ def assessment():
 
             password = request.form.get("password")
 
-            score, strength = check_password(password)
+            password_result = analyze_password(password)
 
-            password_result = {
-                "score": score,
-                "strength": strength
-            }
+            print(password_result)
+           
 
         elif assessment_type == "email":
 
             email_text = request.form.get("email_text")
 
-            score = check_email(email_text)
+            score = analyze_email(email_text)
 
             email_result = (
                 "Likely Phishing"
@@ -174,7 +336,7 @@ def assessment():
 
             url = request.form.get("url")
 
-            url_result = check_url(url)
+            url_result = analyze_url(url)
 
     return render_template(
         "assessment.html",

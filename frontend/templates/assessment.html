@@ -15,7 +15,7 @@
     <h1 class="mb-4">Security Assessment</h1>
 
     <!-- Password Analysis -->
-    <div class="card mb-4">
+    <div id="password_section" class="card mb-4">
         <div class="card-header">
             Password Strength Analysis
         </div>
@@ -24,26 +24,19 @@
 
             <form method="POST">
 
-                <input type="hidden"
-                       name="type"
-                       value="password">
-
-                <input class="form-control mb-3"
-                       type="password"
-                       name="password"
-                       placeholder="Enter password">
-
-                <button class="btn btn-primary">
-                    Analyze Password
-                </button>
-
-            </form>
+                <input type="hidden"  name="type"  value="password">
+                      
+                <input class="form-control mb-3"  type="password"  name="password"  placeholder="Enter password">
+                      
+                <button id="passwordBtn" class="btn btn-primary"> Analyze Password </button>
+             </form>
 
             {% if password_result %}
             <div class="alert alert-info mt-3">
-                Score: {{ password_result.score }}/4
+                Score: {{ password_result.score }}/100
                 <br>
-                Strength: {{ password_result.strength }}
+              
+                Strength: {{ password_result.level }}
             </div>
             {% endif %}
 
@@ -52,7 +45,7 @@
 
     <!-- Email Analysis -->
 
-    <div class="card mb-4">
+    <div id="email_section" class="card mb-4">
 
         <div class="card-header">
             Email Phishing Detection
@@ -62,21 +55,17 @@
 
             <form method="POST">
 
-                <input type="hidden"
-                       name="type"
-                       value="email">
+                <input type="hidden"  name="type"  value="email">        
 
-                <textarea class="form-control mb-3"
-                          name="email_text"
-                          rows="5"
-                          placeholder="Paste email content here"></textarea>
+                <textarea class="form-control mb-3"  name="email_text"   rows="5"
+                         
+                        placeholder="Paste email content here"></textarea>
 
-                <button class="btn btn-warning">
-                    Analyze Email
-                </button>
-
+                <button id="emailBtn" class="btn btn-warning">Analyze Email  </button>
+                    
             </form>
 
+        
             {% if email_result %}
             <div class="alert alert-warning mt-3">
                 {{ email_result }}
@@ -89,7 +78,7 @@
 
     <!-- URL Analysis -->
 
-    <div class="card">
+    <div id="url_section" class="card">
 
         <div class="card-header">
             URL Safety Check
@@ -99,19 +88,12 @@
 
             <form method="POST">
 
-                <input type="hidden"
-                       name="type"
-                       value="url">
-
-                <input class="form-control mb-3"
-                       type="text"
-                       name="url"
-                       placeholder="Enter URL">
-
-                <button class="btn btn-success">
-                    Check URL
-                </button>
-
+                <input type="hidden"  name="type"  value="url">
+                
+                <input class="form-control mb-3"   type="text"   name="url" placeholder="Enter URL">
+     
+                <button id="urlBtn" class="btn btn-success">  Check URL   </button>
+                  
             </form>
 
             {% if url_result %}
